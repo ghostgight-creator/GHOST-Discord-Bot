@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import http from 'http';
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
 import { Command } from './types';
 import { onReady } from './events/ready';
@@ -84,6 +85,16 @@ process.on('unhandledRejection', (reason) => {
 
 process.on('uncaughtException', (err) => {
   console.error('[Uncaught Exception]', err);
+});
+
+// HTTP Health Check Server (For cloud hosting platforms like Render/Koyeb)
+const port = process.env.PORT || 3000;
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+  res.end('👻 GHOST Discord Bot is ONLINE 24/7!');
+});
+server.listen(port, () => {
+  console.log(`🌐 HTTP Server listening on port ${port}`);
 });
 
 // Login
